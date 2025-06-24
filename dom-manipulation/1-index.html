@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/dom-manipulation/1-styles.css">
+    <title>Document</title>
+</head>
+<body>
+<div id="quoteApp">
+  <h1>Dynamic Quote Generator</h1>
+  <div id="quoteDisplay"></div>
+  <input type="text" id="newQuote" placeholder="Enter a new quote" />
+  <button onclick="addQuote()">Add Quote</button>
+  <button onclick="generateRandomQuote()">Generate Quote</button>
+  <button onclick="exportToJson()">Export Quotes</button>
+  <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
+</div>
+
+<script src="/dom-manipulation/1-script.js"></script>
+
+</body>
+</html>
