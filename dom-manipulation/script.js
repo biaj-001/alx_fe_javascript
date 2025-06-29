@@ -284,9 +284,9 @@ document.addEventListener('DOMContentLoaded', () => {
   filterQuotes(); // load quote from selected category
 });
 // === Configuration ===
-const SERVER_URL = "https://jsonplaceholder.typicode.com/posts"; // Replace with your mock or real API
+// const SERVER_URL = "https://jsonplaceholder.typicode.com/posts"; // Replace with your mock or real API
 // === Configuration ===
-const SERVER_URL = 'https://my-json-server.typicode.com/your-username/your-repo/quotes'; // Replace with your mock API URL
+const SERVER_URL = 'https://github.com/biaj-001/quote-api/blob/main/db.json'; // Replace with your mock API URL
 
 // === State ===
 let quotes = JSON.parse(localStorage.getItem('quotes')) || [
