@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
   filterQuotes(); // load quote from selected category
 });
 // === Configuration ===
-const SERVER_URL = 'https://my-json-server.typicode.com/your-username/your-db/quotes'; // Replace with your mock or real API
+const SERVER_URL = "https://jsonplaceholder.typicode.com/posts"; // Replace with your mock or real API
 
 // === State ===
 let quotes = JSON.parse(localStorage.getItem('quotes')) || [
@@ -401,27 +401,33 @@ function syncWithServer() {
   fetch(SERVER_URL)
     .then(res => res.json())
     .then(serverQuotes => {
-      let updated = false;
-      const newQuotes = serverQuotes.filter(sq =>
-        !quotes.some(lq => lq.text === sq.text && lq.category === sq.category)
-      );
+      let newQuotes = [];
+      let conflictsResolved = 0;
+
+      serverQuotes.forEach(serverQuote => {
+        const localMatch = quotes.find(localQuote =>
+          localQuote.text === serverQuote.text &&
+          localQuote.category === serverQuote.category
+        );
+
+        if (!localMatch) {
+          newQuotes.push(serverQuote);
+        }
+      });
 
       if (newQuotes.length > 0) {
         quotes.push(...newQuotes);
         saveQuotes();
-        updated = true;
-      }
-
-      if (updated) {
-        showNotification(`✔ Synced ${newQuotes.length} new quote(s) from server`);
+        showNotification(`✔ Synced ${newQuotes.length} new quote(s) from server`, false);
         populateCategories();
         filterQuotes();
       }
     })
     .catch(() => {
-      showNotification("⚠ Failed to sync with server", true);
+      showNotification('⚠ Server sync failed', true);
     });
 }
+
 
 function showNotification(message, isError = false) {
   const notif = document.createElement('div');
