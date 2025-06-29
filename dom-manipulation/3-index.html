@@ -2,32 +2,39 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/dom-manipulation/1-style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dynamic Quote Generator</title>
+  <link rel="stylesheet" href="/dom-manipulation/3-style.css" />
 </head>
 <body>
   <h1>Dynamic Quote Generator</h1>
 
-  <!-- Display area -->
+  <!-- Category Filter -->
+  <h2>Filter Quotes by Category</h2>
+  <select id="categoryFilter" onchange="filterQuotes()">
+    <option value="all">All Categories</option>
+  </select>
+
+  <!-- Display Quote -->
   <div id="quoteDisplay"></div>
 
-  <!-- Quote controls -->
+  <!-- Show New Quote -->
   <button id="newQuote">Show New Quote</button>
 
-  <!-- Add quote form -->
+  <!-- Add New Quote -->
   <div>
     <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
     <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
     <button id="add-quote-button">Add Quote</button>
   </div>
 
-  <!-- JSON import/export controls -->
+  <!-- Import/Export Controls -->
   <div style="margin-top: 20px;">
     <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
     <button id="exportBtn">Export Quotes as JSON</button>
   </div>
 
-  <script src="/dom-manipulation/1-script.js"></script>
+  <!-- Script -->
+  <script src="/dom-manipulation/3-script.js"></script>
 </body>
 </html>

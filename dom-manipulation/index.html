@@ -1,27 +1,22 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="/dom-manipulation/styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/dom-manipulation/style.css">
   <title>Dynamic Quote Generator</title>
- 
 </head>
 <body>
   <h1>Dynamic Quote Generator</h1>
 
-  <!-- Display Area -->
-  <div id="quoteDisplay">Click the button to show a random quote.</div>
+  <div id="quoteDisplay"></div>
 
-  <!-- Button to Show Quote -->
   <button id="newQuote">Show New Quote</button>
 
-  <!-- Form to Add Quote -->
   <div>
     <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
     <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
-    <br>
-    <button id="addQuoteBtn">Add Quote</button>
+    <button id="add-quote-button">Add Quote</button>
   </div>
 
   <script src="/dom-manipulation/script.js"></script>

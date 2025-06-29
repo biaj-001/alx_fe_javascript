@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="/dom-manipulation/2-style.css">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Filter Quotes by Category</h2>
+<select id="categoryFilter" onchange="filterQuotes()">
+  <option value="all">All Categories</option>
+</select>
+
+<!-- Display -->
+<div id="quoteDisplay"></div>
+
+<!-- Controls -->
+<button id="newQuote">Show New Quote</button>
+
+<!-- Add Quote -->
+<div>
+  <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
+  <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
+  <button id="add-quote-button">Add Quote</button>
+</div>
+
+<!-- JSON Import/Export -->
+<div style="margin-top: 20px;">
+  <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
+  <button id="exportBtn">Export Quotes as JSON</button>
+</div>
+ 
+ <script src="/dom-manipulation/2-script.js"></script>
+    
+</body>
+</html>
