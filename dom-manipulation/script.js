@@ -285,6 +285,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 // === Configuration ===
 const SERVER_URL = "https://jsonplaceholder.typicode.com/posts"; // Replace with your mock or real API
+// === Configuration ===
+const SERVER_URL = 'https://my-json-server.typicode.com/your-username/your-repo/quotes'; // Replace with your mock API URL
 
 // === State ===
 let quotes = JSON.parse(localStorage.getItem('quotes')) || [
@@ -293,7 +295,7 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
   { text: "Believe you can and you're halfway there.", category: "Belief" }
 ];
 
-// === Utility Functions ===
+// === Utility ===
 function saveQuotes() {
   localStorage.setItem('quotes', JSON.stringify(quotes));
 }
@@ -306,7 +308,7 @@ function getSavedCategory() {
   return localStorage.getItem('selectedCategory') || 'all';
 }
 
-// === UI & DOM Functions ===
+// === DOM & Display ===
 function populateCategories() {
   const categories = [...new Set(quotes.map(q => q.category))];
   const filterSelect = document.getElementById('categoryFilter');
@@ -347,21 +349,24 @@ function addQuote() {
   const category = document.getElementById('newQuoteCategory').value.trim();
 
   if (!text || !category) {
-    alert("Both fields are required.");
+    alert("Both quote and category are required.");
     return;
   }
 
-  quotes.push({ text, category });
+  const newQuote = { text, category };
+  quotes.push(newQuote);
   saveQuotes();
+  populateCategories();
+  filterQuotes();
 
   document.getElementById('newQuoteText').value = '';
   document.getElementById('newQuoteCategory').value = '';
 
-  populateCategories();
-  filterQuotes();
+  // Optional: Post to server
+  // postQuoteToServer(newQuote);
 }
 
-// === Import/Export ===
+// === Import & Export ===
 function importFromJsonFile(event) {
   const reader = new FileReader();
   reader.onload = function (e) {
@@ -370,14 +375,14 @@ function importFromJsonFile(event) {
       if (Array.isArray(imported)) {
         quotes.push(...imported);
         saveQuotes();
-        alert("Quotes imported!");
+        showNotification("✔ Quotes imported successfully");
         populateCategories();
         filterQuotes();
       } else {
-        alert("Invalid JSON.");
+        alert("Invalid JSON structure.");
       }
     } catch {
-      alert("Invalid file format.");
+      alert("Error parsing JSON file.");
     }
   };
   reader.readAsText(event.target.files[0]);
@@ -396,39 +401,45 @@ function exportToJsonFile() {
   URL.revokeObjectURL(url);
 }
 
-// === Sync with Server ===
+// === Server Sync ===
 function syncWithServer() {
   fetch(SERVER_URL)
     .then(res => res.json())
     .then(serverQuotes => {
-      let newQuotes = [];
-      let conflictsResolved = 0;
-
-      serverQuotes.forEach(serverQuote => {
-        const localMatch = quotes.find(localQuote =>
-          localQuote.text === serverQuote.text &&
-          localQuote.category === serverQuote.category
-        );
-
-        if (!localMatch) {
-          newQuotes.push(serverQuote);
-        }
-      });
+      const newQuotes = serverQuotes.filter(sq =>
+        !quotes.some(lq => lq.text === sq.text && lq.category === sq.category)
+      );
 
       if (newQuotes.length > 0) {
         quotes.push(...newQuotes);
         saveQuotes();
-        showNotification(`✔ Synced ${newQuotes.length} new quote(s) from server`, false);
+        showNotification(`✔ Synced ${newQuotes.length} new quote(s) from server`);
         populateCategories();
         filterQuotes();
       }
     })
     .catch(() => {
-      showNotification('⚠ Server sync failed', true);
+      showNotification("⚠ Server sync failed", true);
     });
 }
 
+// === Optional: POST to Server ===
+function postQuoteToServer(quote) {
+  fetch(SERVER_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(quote)
+  })
+    .then(res => res.json())
+    .then(data => {
+      console.log("Quote posted:", data);
+    })
+    .catch(err => {
+      console.error("Failed to post quote:", err);
+    });
+}
 
+// === Notification UI ===
 function showNotification(message, isError = false) {
   const notif = document.createElement('div');
   notif.className = 'notification' + (isError ? ' error' : '');
@@ -437,7 +448,7 @@ function showNotification(message, isError = false) {
   setTimeout(() => notif.remove(), 3000);
 }
 
-// === Initialize App ===
+// === Initialization ===
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('newQuote').addEventListener('click', filterQuotes);
   document.getElementById('add-quote-button').addEventListener('click', addQuote);
@@ -446,7 +457,7 @@ document.addEventListener('DOMContentLoaded', () => {
   populateCategories();
   filterQuotes();
 
-  syncWithServer();
-  setInterval(syncWithServer, 30000); // Sync every 30 seconds
+  syncWithServer();                // Initial sync
+  setInterval(syncWithServer, 30000); // Every 30 seconds
 });
 
